@@ -10,12 +10,24 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        Application.targetFrameRate = 60;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.A))
+        {
+            
+        }
+        if(Input.GetKeyDown(KeyCode.D))
+        {
+
+        }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            
+        }
     }
 }
