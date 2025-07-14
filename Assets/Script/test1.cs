@@ -6,30 +6,38 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody))]
 public class test1 : MonoBehaviour
 {
-    [SerializeField]
-    [Tooltip("プレイヤーの速度調整")]
-    private float speed = 0;
+    private InputAciton controls;
+    private Vector2 moveInput;
     private Rigidbody rb;
-    private float movementX;
-    private float movementY;
-    // Start is called before the first frame update
-    void Start()
+
+    [SerializeField]
+    private float moveSpeed = 5f;
+
+    private void Awake()
     {
-        rb = gameObject.GetComponent<Rigidbody>();
+        controls = new InputAciton();
+
+        // 入力イベントに関数を登録
+        controls.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
+        controls.Player.Move.canceled += ctx => moveInput = Vector2.zero;
+
+        rb = GetComponent<Rigidbody>();
     }
-    private void OnMove(InputValue movementValue)
+
+    private void OnEnable()
     {
-        // Moveアクションの入力値を取得
-        Vector2 movementVector = movementValue.Get<Vector2>();
-        // x,y軸方向の入力値を変数に代入
-        movementX = movementVector.x;
-        movementY = movementVector.y;
+        controls.Enable();
     }
+
+    private void OnDisable()
+    {
+        controls.Disable();
+    }
+
     private void FixedUpdate()
     {
-        // 入力値を元に3軸ベクトルを作成
-        Vector3 movement = new Vector3(movementX, 0.0f, movementY);
-        // rigidbodyのAddForceを使用してプレイヤーを動かす。
-        rb.AddForce(movement * speed);
+        // 入力された2D（X, Y）ベクトルを3Dベクトルに変換
+        Vector3 move = new Vector3(moveInput.x, 0, moveInput.y);
+        rb.AddForce(move * moveSpeed, ForceMode.Force);
     }
 }
