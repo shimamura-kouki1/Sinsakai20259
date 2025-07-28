@@ -17,8 +17,8 @@ public class testPlayer : MonoBehaviour
         _inputMap = new InputMap();
 
         // Move入力の値を受け取る設定
-        _inputMap.Player.Move.performed += ctx => _InputDirectoin = ctx.ReadValue<Vector2>();
-        _inputMap.Player.Move.canceled += ctx => _InputDirectoin = Vector2.zero;
+        _inputMap.Player.Move.performed += ctx => _InputDirectoin = ctx.ReadValue<Vector2>();  //Moveが実行されたときにctxにVector2として数値を読み取る  _InputDirectoinに数値を保存する
+        _inputMap.Player.Move.canceled += ctx => _InputDirectoin = Vector2.zero;//入力をキャンセルされたらVector2の値をにする　 _InputDirectoinを0に戻す
     }
 
     // Start is called before the first frame update
@@ -35,13 +35,10 @@ public class testPlayer : MonoBehaviour
         {
             Debug.Log("ファイヤー");
         }
-        if(_inputMap.Player.Move.triggered)
-        {
-           
-        }
     }
     void FixedUpdate()
     {
+
         Vector3 currentVelocity = _rb.velocity;
         Vector3 move = new Vector3(_InputDirectoin.x * moveSpeed, currentVelocity.y, _InputDirectoin.y * moveSpeed);
         _rb.velocity = move;
