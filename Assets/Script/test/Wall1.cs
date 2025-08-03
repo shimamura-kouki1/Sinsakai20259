@@ -10,7 +10,6 @@ public class Wall1 : MonoBehaviour
     [SerializeField] private int _BoxSpace;
     [SerializeField] private int _pos;
     [SerializeField] private int _pos2;
-    [SerializeField] private int _origin;
 
     [SerializeField]
     List<GameObject> _Box;
