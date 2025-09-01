@@ -1293,7 +1293,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1713586720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1306,9 +1306,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a9b4fcd1dd5fb04c8a72c495e08aec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stage: []
-  stageWidth: 5
-  stageHeight: 5
+  _stage:
+  - {fileID: 7695965581218695061, guid: 0dfc37c6af2f2764d8dbc57f94ac1cbb, type: 3}
+  - {fileID: 5471206506752797968, guid: a974a3e1e75a35044bdd57dcf61c0f82, type: 3}
+  - {fileID: 5648631137993805746, guid: 2e9fdfdde2c079b4096426b0f01e837d, type: 3}
+  stageWidth: 3
+  stageHeight: 1
   spacing: 2
 --- !u!4 &1713586721
 Transform:
@@ -1429,13 +1432,15 @@ GameObject:
   - component: {fileID: 1957634802}
   - component: {fileID: 1957634801}
   - component: {fileID: 1957634800}
+  - component: {fileID: 1957634804}
+  - component: {fileID: 1957634805}
   m_Layer: 0
   m_Name: prayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &1957634800
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1522,6 +1527,47 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1957634804
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1957634799}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &1957634805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1957634799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fad2476e60fd7424994528f7bf0d5170, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _MoveSpeed: 2
+  _rg: {fileID: 1187981760}
 --- !u!1 &2020067260
 GameObject:
   m_ObjectHideFlags: 0
@@ -1537,7 +1583,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2020067261
 Transform:
   m_ObjectHideFlags: 0
