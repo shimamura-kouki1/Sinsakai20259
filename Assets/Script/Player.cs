@@ -21,24 +21,14 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.A))
-        {
-         
-        }
-        if(Input.GetKeyDown(KeyCode.D))
-        {
-
-        }
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            
-        }
+    
+    }
+    public void Move()
+    {
+        _rg.velocity = new Vector3(_inputDirection.x * _MoveSpeed, _rg.velocity.y, _inputDirection.z);
     }
 
-        public void Move()
-        {
-            _rg.velocity = new Vector3(_inputDirection.x * _MoveSpeed, _rg.velocity.y,_inputDirection.z);
-        }
+
     public void OnMove(InputAction.CallbackContext context)        //InputAction.CallbackContextはInput Systemで発生したイベントを取得するためのもの
     {
         _inputDirection = context.ReadValue<Vector3>();             //contextをVector2型に変換した値を_inputDirectionに代入している　
