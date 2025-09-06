@@ -1293,7 +1293,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1713586720
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1306,10 +1306,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a9b4fcd1dd5fb04c8a72c495e08aec1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stage:
-  - {fileID: 7695965581218695061, guid: 0dfc37c6af2f2764d8dbc57f94ac1cbb, type: 3}
-  - {fileID: 5471206506752797968, guid: a974a3e1e75a35044bdd57dcf61c0f82, type: 3}
-  - {fileID: 5648631137993805746, guid: 2e9fdfdde2c079b4096426b0f01e837d, type: 3}
+  _roomprafab: []
   stageWidth: 3
   stageHeight: 1
   spacing: 2
