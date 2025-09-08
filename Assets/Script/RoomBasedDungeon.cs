@@ -34,24 +34,26 @@ public class RoomBasedDungeon : MonoBehaviour
             Vector3 stratpos = Vector3.zero;
             PlaceRoom(_roomprafab[0], stratpos);
 
-            for (int i = 1; i < _roomCount; i++)
-            {
-                bool placed = false;
-                int attempts = 0;
+        for (int i = 1; i < _roomCount; i++)
+        {
+             bool placed = false;
+             int attempts = 0;
 
             while(!placed && attempts <50)
             {
-                GameObject _Placeroom = _Placeroom[Random.Range(0,_Placeroom.Count)];
+                GameObject parentRoom = _Placeroom[Random.Range(0,_Placeroom.Count)];
                 Vector3 dir = GetRandomDirection();
 
-                Vector3 newPos = _Placeroom.transform.position + dir * _roomSize;
+                Vector3 newPos = parentRoom.transform.position + dir * _roomSize;
+
+                if (!_occupiedPositions.Contains(newPos))
+                {
+                    GameObject newRoomPrefab = _roomprafab[Random.Range(0, _roomprafab.Length)];
+                    PlaceRoom(newRoomPrefab, newPos);
+                    placed = true;
+                }
             }
-            if (!_occupiedPositions.Contains(newPos))
-            {
-                GameObject newRoomPrefab = _roomprafab[Random.Range(0,_roomprafab.Length)];
-                PlaceRoom(newRoomPrefab, newPos);
-                placed = true;
-            }
+            
 
         }
 
