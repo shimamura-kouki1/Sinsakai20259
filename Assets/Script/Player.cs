@@ -7,9 +7,10 @@ public class Player : MonoBehaviour
 {
     [SerializeField]
     public int _MoveSpeed;
+
     private Vector2 _inputDirection;
 
-    public Rigidbody _rd;
+    private Rigidbody _rd;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,10 +27,15 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Vector3 move = new Vector3(_inputDirection.x,0f,_inputDirection.y);
-        _rd.MovePosition(_rd.position + move * _MoveSpeed * Time.fixedDeltaTime);
+        //Vector3 move = new Vector3(_inputDirection.x,0f,_inputDirection.y);
+        //_rd.MovePosition(_rd.position + move * _MoveSpeed * Time.fixedDeltaTime);
     }
 
+    public void Move()
+    {
+        _rd.MovePosition(_rd.position + new Vector3(_inputDirection.x, 0f, _inputDirection.y) * _MoveSpeed * Time.fixedDeltaTime);
+
+    }
 
     public void OnMove(InputAction.CallbackContext context)        //InputAction.CallbackContextÇÕInput SystemÇ≈î≠ê∂ÇµÇΩÉCÉxÉìÉgÇéÊìæÇ∑ÇÈÇΩÇﬂÇÃÇ‡ÇÃ
     {
