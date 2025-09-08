@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     [SerializeField]
-    public int _MoveSpeed;
+    public float _MoveSpeed;
 
     private Vector2 _inputDirection;
 
@@ -25,23 +25,22 @@ public class Player : MonoBehaviour
         
     }
 
+
+    public void Onmove(InputAction.CallbackContext context)
+    {
+        // 押している間は入力ベクトルを保持
+        _inputDirection = context.ReadValue<Vector2>();
+        Debug.Log("Onmove called! " + _inputDirection);
+    }
+
     private void FixedUpdate()
     {
-        //Vector3 move = new Vector3(_inputDirection.x,0f,_inputDirection.y);
+
+        //Vector3 move = new Vector3(_inputDirection.x, 0f, _inputDirection.y);
         //_rd.MovePosition(_rd.position + move * _MoveSpeed * Time.fixedDeltaTime);
-    }
 
-    public void Move()
-    {
         _rd.MovePosition(_rd.position + new Vector3(_inputDirection.x, 0f, _inputDirection.y) * _MoveSpeed * Time.fixedDeltaTime);
-
     }
 
-    public void OnMove(InputAction.CallbackContext context)        //InputAction.CallbackContextはInput Systemで発生したイベントを取得するためのもの
-    {
 
-        _inputDirection = context.ReadValue<Vector2>();             //contextをVector2型に変換した値を_inputDirectionに代入している　
-                                                                    //つまり、右入力なら（1,0）左入力なら（-1,0）を代入している
-        Debug.Log("aaa");
-    }
 }
