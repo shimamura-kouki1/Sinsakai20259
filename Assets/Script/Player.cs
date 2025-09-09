@@ -30,15 +30,10 @@ public class Player : MonoBehaviour
     {
         // 押している間は入力ベクトルを保持
         _inputDirection = context.ReadValue<Vector2>();
-        Debug.Log("Onmove called! " + _inputDirection);
     }
 
     private void FixedUpdate()
-    {
-
-        //Vector3 move = new Vector3(_inputDirection.x, 0f, _inputDirection.y);
-        //_rd.MovePosition(_rd.position + move * _MoveSpeed * Time.fixedDeltaTime);
-
+    {   //指定された位置に移動する
         _rd.MovePosition(_rd.position + new Vector3(_inputDirection.x, 0f, _inputDirection.y) * _MoveSpeed * Time.fixedDeltaTime);
     }
 
