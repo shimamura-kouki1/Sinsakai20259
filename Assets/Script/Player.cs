@@ -27,9 +27,9 @@ public class Player : MonoBehaviour
         _inputDirection = context.ReadValue<Vector2>();
     }
     public void OnSprint(InputAction.CallbackContext context)
-    {
+    {   //スプリントの切り替え
         if(context.performed)
-        {
+        {   
             _isSprinting = true;
         }
         if(context.canceled)
@@ -37,13 +37,11 @@ public class Player : MonoBehaviour
             _isSprinting = false;
         }
     }
-
     private void FixedUpdate()
-    {   
-        float Speed = _isSprinting ? _SprintSpeed : _MoveSpeed;
+    {
+        //歩きと走りの速度切り替え
+        float Speed = _isSprinting ? _MoveSpeed : _SprintSpeed;
         //指定された位置に移動する
         _rd.MovePosition(_rd.position + new Vector3(_inputDirection.x, 0f, _inputDirection.y) * Speed * Time.fixedDeltaTime);
     }
-
-
 }
