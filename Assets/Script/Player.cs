@@ -5,8 +5,10 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField]
-    public float _MoveSpeed;
+    [SerializeField]float _MoveSpeed;
+    [SerializeField] float _SprintSpeed;
+
+    private bool _isSprinting;
 
     private Vector2 _inputDirection;
 
@@ -19,22 +21,28 @@ public class Player : MonoBehaviour
         _rd = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-
     public void Onmove(InputAction.CallbackContext context)
     {
         // 押している間は入力ベクトルを保持
         _inputDirection = context.ReadValue<Vector2>();
     }
+    public void OnSprint(InputAction.CallbackContext context)
+    {
+        if(context.performed)
+        {
+            _isSprinting = true;
+        }
+        if(context.canceled)
+        {
+            _isSprinting = false;
+        }
+    }
 
     private void FixedUpdate()
-    {   //指定された位置に移動する
-        _rd.MovePosition(_rd.position + new Vector3(_inputDirection.x, 0f, _inputDirection.y) * _MoveSpeed * Time.fixedDeltaTime);
+    {   
+        float Speed = _isSprinting ? _SprintSpeed : _MoveSpeed;
+        //指定された位置に移動する
+        _rd.MovePosition(_rd.position + new Vector3(_inputDirection.x, 0f, _inputDirection.y) * Speed * Time.fixedDeltaTime);
     }
 
 
