@@ -7,33 +7,33 @@ using UnityEngine.InputSystem.XR;
 public class Player_Cah : MonoBehaviour
 {
     [Header("Movement Settings")]
-    [SerializeField] private float _walkSpeed = 2f;
-    [SerializeField] private float _sprintSpeed = 4f;
-    [SerializeField] private float _gravity = -9.81f;
+    [SerializeField] private float _walkSpeed = 2f;     //歩行速度
+    [SerializeField] private float _sprintSpeed = 4f;   //スプリント速度
+    [SerializeField] private float _gravity = -9.81f;   //重力
 
     [Header("Look Settings")]
-    [SerializeField] private float _mouseSensitivity = 2f;
-    [SerializeField] private Transform _cameraTransform;
+    [SerializeField] private float _mouseSensitivity = 2f;//マウス感度
+    [SerializeField] private Transform _cameraTransform;　//視点カメラ
 
     private CharacterController _controller;
-    private Vector2 _moveInput;
-    private Vector2 _lookInput;
-    private float _verticalRotation;
-    private Vector3 _velocity;
-    private bool _isSprinting;
+    private Vector2 _moveInput;//移動入力
+    private Vector2 _lookInput;//視点入力
+    private float _verticalRotation;//上下の視点　回転の角度
+    private Vector3 _velocity;//重力のベクトル
+    private bool _isSprinting;//ダッシュ中かどうかのフラグ
 
     // Start is called before the first frame update
     void Start()
     {
         _controller = GetComponent<CharacterController>();
-        Cursor.lockState = CursorLockMode.Locked; // マウスカーソルを固定
+        Cursor.lockState = CursorLockMode.Locked; // マウスカーソルを中央に固定
     }
 
     // Update is called once per frame
     void Update()
     {
-        // === 移動処理 ===
-        float speed = _isSprinting ? _sprintSpeed : _walkSpeed;
+        //移動処理
+        float speed = _isSprinting ? _sprintSpeed : _walkSpeed;//歩行かダッシュかを判別する
         Vector3 move = transform.right * _moveInput.x + transform.forward * _moveInput.y;
         _controller.Move(move * speed * Time.deltaTime);
 
