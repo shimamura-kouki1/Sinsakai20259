@@ -40,7 +40,7 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         //•à‚«‚Æ‘–‚è‚Ì‘¬“xØ‚è‘Ö‚¦
-        float Speed = _isSprinting ? _MoveSpeed : _SprintSpeed;
+        float Speed = _isSprinting ? _SprintSpeed : _MoveSpeed;
         //w’è‚³‚ê‚½ˆÊ’u‚ÉˆÚ“®‚·‚é
         _rd.MovePosition(_rd.position + new Vector3(_inputDirection.x, 0f, _inputDirection.y) * Speed * Time.fixedDeltaTime);
     }
