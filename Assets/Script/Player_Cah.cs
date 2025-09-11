@@ -33,6 +33,11 @@ public class Player_Cah : MonoBehaviour
     {
         _controller = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked; // マウスカーソルを中央に固定
+
+        if(_flashlight != null)
+        {
+            _flashlight.enabled = false;
+        }
     }
 
     // Update is called once per frame
@@ -75,5 +80,16 @@ public class Player_Cah : MonoBehaviour
     {
         if (context.performed) _isSprinting = true;
         if (context.canceled) _isSprinting = false;
+    }
+
+    public void OnLight(InputAction.CallbackContext context)
+    {
+        if (_flashlight == null) return; // ぬるチェック
+
+        if (context.performed)
+        {
+            _flashlightOn = !_flashlightOn;//bool状態の反転
+            _flashlight.enabled = _flashlightOn;//コンポーネントの状態反転
+        }
     }
 }
