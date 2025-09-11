@@ -19,6 +19,9 @@ public class Player_Cah : MonoBehaviour
     [SerializeField] private Light _flashlight;
     private bool _flashlightOn = false;
 
+    [Header("Player Action")]
+    [SerializeField]private float _rayDistance = 3f; // 視線が届く距離
+
 
     private CharacterController _controller;
     private Vector2 _moveInput;//移動入力
@@ -43,12 +46,12 @@ public class Player_Cah : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //移動処理
+        // === 移動処理 ===
         float speed = _isSprinting ? _sprintSpeed : _walkSpeed;//歩行かダッシュかを判別する
         Vector3 move = transform.right * _moveInput.x + transform.forward * _moveInput.y;
         _controller.Move(move * speed * Time.deltaTime);
 
-        // 重力を適用
+        // === 重力を適用 ===
         if (_controller.isGrounded && _velocity.y < 0)
         {
             _velocity.y = -2f; // 地面に押し付ける
@@ -56,7 +59,7 @@ public class Player_Cah : MonoBehaviour
         _velocity.y += _gravity * Time.deltaTime;
         _controller.Move(_velocity * Time.deltaTime);
 
-        // === 視点回転 ===
+        // === 視点回転 === 
         transform.Rotate(Vector3.up * _lookInput.x * _mouseSensitivity);
 
         _verticalRotation -= _lookInput.y * _mouseSensitivity;
@@ -92,4 +95,22 @@ public class Player_Cah : MonoBehaviour
             _flashlight.enabled = _flashlightOn;//コンポーネントの状態反転
         }
     }
-}
+
+    public void OnAction(InputAction.CallbackContext context)
+    {
+        //押された瞬間以外リターン
+        if (!context.performed) return;
+
+        // カメラ中央からRayを飛ばす+レイの距離
+        if (Physics.Raycast(_cameraTransform.position, _cameraTransform.forward, out RaycastHit hit, _rayDistance))
+        {
+            //レイがドアに当たったか調べる
+            Door door = hit.collider.GetComponentInParent<Door>();
+            //ドアだった場合実行（開閉）
+            if (door != null)
+            {
+                door.OpenDoor();
+            }
+        }
+    }
+    }
