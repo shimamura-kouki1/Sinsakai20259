@@ -13,7 +13,12 @@ public class Player_Cah : MonoBehaviour
 
     [Header("Look Settings")]
     [SerializeField] private float _mouseSensitivity = 2f;//マウス感度
-    [SerializeField] private Transform _cameraTransform;　//視点カメラ
+    [SerializeField] private Transform _cameraTransform; //視点カメラ
+
+    [Header("Flashlight Settings")]
+    [SerializeField] private Light _flashlight;
+    private bool _flashlightOn = false;
+
 
     private CharacterController _controller;
     private Vector2 _moveInput;//移動入力
@@ -21,6 +26,7 @@ public class Player_Cah : MonoBehaviour
     private float _verticalRotation;//上下の視点　回転の角度
     private Vector3 _velocity;//重力のベクトル
     private bool _isSprinting;//ダッシュ中かどうかのフラグ
+
 
     // Start is called before the first frame update
     void Start()
