@@ -86,47 +86,68 @@ public class RoomBasedDungeon : MonoBehaviour
     }
 
     /// <summary>
-    /// 部屋の接続に応じてドアや壁を配置
+    /// 部屋にあるアンカーをチェックして、ドアか壁を配置
     /// </summary>
     void AddDoors()
     {
-        foreach (GameObject room in _placedRooms)//生成したすべての部屋に対して
+        foreach (GameObject room in _placedRooms)
         {
-            Vector3 roomPos = room.transform.position;//ポジション取得
-
-            TryPlaceDoorOrWall(roomPos, Vector3.forward);
-            TryPlaceDoorOrWall(roomPos, Vector3.back);
-            TryPlaceDoorOrWall(roomPos, Vector3.left);
-            TryPlaceDoorOrWall(roomPos, Vector3.right);
-        }
-    }
-
-    /// <summary>
-    /// となりに部屋があるかチェックしてドアか壁を置く
-    /// </summary>
-    void TryPlaceDoorOrWall(Vector3 roomPos, Vector3 dir)
-    {
-        Vector3 neighborPos = roomPos + dir * _roomSize;//隣の部屋の位置の座標
-        Vector3 doorPos = roomPos + dir * (_roomSize / 2f); //ドアの置く位置
-
-        Quaternion rot = Quaternion.identity;//回転の初期化
-        if (dir == Vector3.back) rot = Quaternion.Euler(0, 180, 0);//ドアを置く位置によって回転する度数
-        if (dir == Vector3.left) rot = Quaternion.Euler(0, -90, 0);
-        if (dir == Vector3.right) rot = Quaternion.Euler(0, 90, 0);
-
-        if (_occupiedPositions.Contains(neighborPos))//隣に部屋があれば
-        {
-            if (_doorPrefab != null)//変数にドアが設定されていたら
+            foreach (Transform anchor in room.GetComponentInChildren<Transform>())
             {
-                Instantiate(_doorPrefab, doorPos, rot);//ドアの設置
-            }
-        }
-        else//部屋がなかったら
-        {
-            if (_wallPrefab != null)//壁が設定されていたら
-            {
-                Instantiate(_wallPrefab, doorPos, rot);//壁の配置
+
+                if (!anchor.name.StartsWith("Anchor")) continue;
+                {
+
+                    Vector3 dir = Vector3.zero;
+                    if(anchor.name.Contains("North"))dir = Vector3.forward;
+                    else if (anchor.name.Contains("South")) dir= Vector3.back;
+                    else if (anchor.name.Contains("East")) dir = Vector3.right;
+                    else if (anchor.name.Contains("West")) dir = Vector3.left; 
+
+                    Vector3 neighborPos = room.transform.position + dir * _roomSize;//隣の部屋の位置の座標
+
+                    if (_occupiedPositions.Contains(neighborPos))//隣に部屋があれば
+                    {
+                        if (_doorPrefab != null)//変数にドアが設定されていたら
+                        {
+                            Quaternion correction = Quaternion.Euler(0, 90, 0);
+                            Instantiate(_doorPrefab, anchor.position, anchor.rotation * correction, anchor.transform);//ドアの設置
+                        }
+                    }
+                    else//部屋がなかったら
+                    {
+                        if (_wallPrefab != null)//壁が設定されていたら
+                        {
+                            Instantiate(_wallPrefab, anchor.position, anchor.rotation);//壁の配置
+                        }
+                    }
+                }
             }
         }
     }
 }
+
+
+
+
+/// <summary>
+/// 部屋の接続に応じてドアや壁を配置
+/// </summary>
+//void AddDoors()
+//{
+//    foreach (GameObject room in _placedRooms)//生成したすべての部屋に対して
+//    {
+//        Vector3 roomPos = room.transform.position;//ポジション取得
+
+//        TryPlaceDoorOrWall(roomPos, Vector3.forward);
+//        TryPlaceDoorOrWall(roomPos, Vector3.back);
+//        TryPlaceDoorOrWall(roomPos, Vector3.left);
+//        TryPlaceDoorOrWall(roomPos, Vector3.right);
+//    }
+//}
+
+
+/// <summary>
+/// となりに部屋があるかチェックしてドアか壁を置く
+/// </summary>
+//void TryPlaceDoorOrWall(Vector3 roomPos, Vector3 dir)
