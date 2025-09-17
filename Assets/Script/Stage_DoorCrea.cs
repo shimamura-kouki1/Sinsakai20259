@@ -1,5 +1,6 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem.EnhancedTouch;
 
 public class RoomBasedDungeon : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class RoomBasedDungeon : MonoBehaviour
     void Start()
     {
         GenerateDungeon();//部屋の作成
-        AddDoors();//ドアの追加
+        AddDoors();//部屋の接続（ドア、壁の配置）
     }
 
     /// <summary>
@@ -29,31 +30,32 @@ public class RoomBasedDungeon : MonoBehaviour
     {
         if (_roomPrefabs == null || _roomPrefabs.Length == 0) return;//プレハブが未設定なら終了
 
-        // スタート部屋を配置
-        Vector3 startPos = Vector3.zero;
-        PlaceRoom(_roomPrefabs[0],startPos);//スタートする部屋の位置
+        PlaceRoom(_roomPrefabs[0], Vector3.zero);//スタートする部屋の位置（0，0，0）
 
         // 残りの部屋を配置
         for (int i = 1; i < _roomCount; i++)
         {
-            bool placed = false;
-            int attempts = 0;
+            bool placed = false;//部屋が置けたかどうか
+            int attempts = 0;//試行回数（無限ループにならないために）
 
             while (!placed && attempts < 50)//試行回数が50まで
             {
-                attempts++;
+                attempts++;//試行回数をプラス
 
                 // ランダムに既存の部屋を選択
                 GameObject parentRoom = _placedRooms[Random.Range(0, _placedRooms.Count)];
-                Vector3 dir = GetRandomDirection();//ランダムな方向を決定
+                //配置する位置をランダムな方向に決定
+                Vector3 dir = GetRandomDirection();
 
-                // 新しい部屋の位置を決定
-                Vector3 newPos = parentRoom.transform.position + dir * _roomSize;//一部屋分ずらした位置に配置
+                // 新しい部屋の位置を決定　親の部屋から一部屋分ずらした位置に配置
+                Vector3 newPos = parentRoom.transform.position + dir * _roomSize;
 
-                // 既に部屋がある場所はスキップ
+                // 既に部屋がある場所は再検索
+
+
                 if (!_occupiedPositions.Contains(newPos))//newPosにまだ部屋が生成されていなければ実行
                 {
-                    GameObject newRoomPrefab = _roomPrefabs[Random.Range(0, _roomPrefabs.Length)];//ランダムに部屋を選ぶ
+                    GameObject newRoomPrefab = _roomPrefabs[Random.Range(0, _roomPrefabs.Length)];//配列からランダムに部屋を選ぶ
                     PlaceRoom(newRoomPrefab, newPos);//部屋の配置
                     placed = true;//配置できたから終了
                 }
@@ -64,7 +66,7 @@ public class RoomBasedDungeon : MonoBehaviour
     /// <summary>
     /// 上下左右のランダム方向を返す
     /// </summary>
-    Vector3 GetRandomDirection()//配置する部屋の位置を四方からランダムにとる
+    Vector3 GetRandomDirection()
     {
         switch (Random.Range(0, 4))//0～3の値をランダムでとる
         {
@@ -90,36 +92,45 @@ public class RoomBasedDungeon : MonoBehaviour
     /// </summary>
     void AddDoors()
     {
-        foreach (GameObject room in _placedRooms)
+        foreach (GameObject room in _placedRooms)//すべての部屋に対して
         {
-            foreach (Transform anchor in room.GetComponentInChildren<Transform>())
+            foreach (Transform anchor in room.GetComponentInChildren<Transform>())//部屋内の全ての Transform を取得
             {
 
-                if (!anchor.name.StartsWith("Anchor")) continue;
+                if (!anchor.name.StartsWith("Anchor")) continue;//Anchor以外はスキップ
+
+                //アンカーの名前から方向を判定する
+                Vector3 dir = Vector3.zero;
+                if (anchor.name.Contains("North")) dir = Vector3.forward;
+                else if (anchor.name.Contains("South")) dir = Vector3.back;
+                else if (anchor.name.Contains("East")) dir = Vector3.right;
+                else if (anchor.name.Contains("West")) dir = Vector3.left;
+
+                Vector3 neighborPos = room.transform.position + dir * _roomSize;//隣の部屋の位置の座標
+
+                // 補正後の回転を計算（South / West のときだけ - 90°回す）
+                Quaternion rot = anchor.rotation;
+                if (anchor.name.Contains("South") || anchor.name.Contains("West")) //なぜかSouth / Westだけ補正しないと縦に生成されてしまう
                 {
+                    rot *= Quaternion.Euler(0, -90, 0);
+                }
 
-                    Vector3 dir = Vector3.zero;
-                    if(anchor.name.Contains("North"))dir = Vector3.forward;
-                    else if (anchor.name.Contains("South")) dir= Vector3.back;
-                    else if (anchor.name.Contains("East")) dir = Vector3.right;
-                    else if (anchor.name.Contains("West")) dir = Vector3.left; 
+                //隣に部屋があれば
+                if (_occupiedPositions.Contains(neighborPos))
+                {
+                    Vector3 myPos = room.transform.position;//
 
-                    Vector3 neighborPos = room.transform.position + dir * _roomSize;//隣の部屋の位置の座標
-
-                    if (_occupiedPositions.Contains(neighborPos))//隣に部屋があれば
+                    //重複生成防止のために、座標の小さいほう部屋からドアを作る
+                    if (myPos.x < neighborPos.x || (Mathf.Approximately(myPos.x, neighborPos.x) && myPos.z < neighborPos.z))
                     {
-                        if (_doorPrefab != null)//変数にドアが設定されていたら
-                        {
-                            Quaternion correction = Quaternion.Euler(0, 90, 0);
-                            Instantiate(_doorPrefab, anchor.position, anchor.rotation * correction, anchor.transform);//ドアの設置
-                        }
+                        Instantiate(_doorPrefab, anchor.position, rot);//ドアの設置
                     }
-                    else//部屋がなかったら
+                }
+                else//隣に部屋がなかったら壁を配置
+                {
+                    if (_wallPrefab != null)//壁が設定されていたら
                     {
-                        if (_wallPrefab != null)//壁が設定されていたら
-                        {
-                            Instantiate(_wallPrefab, anchor.position, anchor.rotation);//壁の配置
-                        }
+                        Instantiate(_wallPrefab, anchor.position, rot);//壁の配置
                     }
                 }
             }
