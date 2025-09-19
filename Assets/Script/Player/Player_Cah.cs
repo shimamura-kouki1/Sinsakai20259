@@ -25,6 +25,7 @@ public class Player_Cah : MonoBehaviour
     private Vector2 _moveInput;//移動入力
     private Vector2 _lookInput;//視点入力
     private float _verticalRotation;//上下の視点　回転の角度
+    private float _yaw;              // 左右視点の角度
     private Vector3 _velocity;//重力のベクトル
     private bool _isSprinting;//ダッシュ中かどうかのフラグ
 
@@ -58,12 +59,13 @@ public class Player_Cah : MonoBehaviour
         _controller.Move(_velocity * Time.deltaTime);
 
         // === 視点回転 === 
-        transform.Rotate(Vector3.up * _lookInput.x * _mouseSensitivity);// 左右の回転でプレイヤー本体を回転させる
 
+        _yaw += _lookInput.x * _mouseSensitivity;
         _verticalRotation -= _lookInput.y * _mouseSensitivity;// 上下回転を入力に応じて増減
         _verticalRotation = Mathf.Clamp(_verticalRotation, -80f, 80f); // 上下視点の角度制限
-        _cameraTransform.localRotation = Quaternion.Euler(_verticalRotation, 0f, 0f);// カメラのローカル回転を上下回転に反映
 
+        transform.rotation = Quaternion.Euler(0f, _yaw, 0f); // プレイヤー本体は左右
+        _cameraTransform.localRotation = Quaternion.Euler(_verticalRotation, 0f, 0f); // カメラは上下
     }
 
     // ==== Input System コールバック ====
