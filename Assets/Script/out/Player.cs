@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField]float _MoveSpeed;
+    [SerializeField] float _MoveSpeed;
     [SerializeField] float _SprintSpeed;
 
     private bool _isSprinting;
@@ -17,7 +15,6 @@ public class Player : MonoBehaviour
     void Start()
     {
         Application.targetFrameRate = 60;
-
         _rd = GetComponent<Rigidbody>();
     }
 
@@ -28,11 +25,11 @@ public class Player : MonoBehaviour
     }
     public void OnSprint(InputAction.CallbackContext context)
     {   //ÉXÉvÉäÉìÉgÇÃêÿÇËë÷Ç¶
-        if(context.performed)
-        {   
+        if (context.performed)
+        {
             _isSprinting = true;
         }
-        if(context.canceled)
+        if (context.canceled)
         {
             _isSprinting = false;
         }
