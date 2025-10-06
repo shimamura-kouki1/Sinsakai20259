@@ -11,16 +11,16 @@ public class Enemy2 : MonoBehaviour
 
     private Rigidbody _rb;
     private float _speed;//エネミーの総合的なスピード
-    private float _timer;　//寿命をカウントするためのもの
+    private float _timer;//寿命をカウントするためのもの
     private bool _isRotation = false;//回転中かどうか
-    private int _turnDirection = 1;    // -1=左, 1=右
-    private Quaternion _targetRot;     // 旋回先の角度
+    private int _turnDirection = 1;// -1=左, 1=右
+    private Quaternion _targetRot;// 旋回先の角度
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
 
-        _speed = _playerBaseSpeed * _enemySpeed;
+        _speed = _playerBaseSpeed * _enemySpeed;//速度計算　プレイヤー速度*倍率
 
         _timer = _lifetime;//初期化
     }
@@ -36,7 +36,7 @@ public class Enemy2 : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_isRotation)
+        if (_isRotation)//回転中
         {
             // 旋回処理
             transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRot, _rotationSpeed * Time.fixedDeltaTime);
@@ -54,12 +54,12 @@ public class Enemy2 : MonoBehaviour
         {
             if (hit.collider.CompareTag("Furniture"))//ヒットしたコライダーのタグが一致したら
             {
-                _turnDirection = Random.Range(0, 2) == 0 ? 1 : -1; //左右ランダムに動くように 1 = 右, -1 = 左
+                _turnDirection = Random.Range(0, 2) == 0 ? 1 : -1; //左右ランダムに回避できるように 1 = 右, -1 = 左
 
                 // 直角方向を計算している
                 _targetRot = Quaternion.LookRotation(Vector3.Cross(transform.forward, Vector3.up).normalized * _turnDirection, Vector3.up);
             }
-            _isRotation = true;
+            _isRotation = true;//回避動作に入る
             return;//旋回中は移動しないように
         }
         _rb.MovePosition(_rb.position + transform.forward * _speed * Time.fixedDeltaTime);//前進し続ける
@@ -67,7 +67,7 @@ public class Enemy2 : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Vector3 reflectDir = Vector3.Reflect(transform.forward, collision.contacts[0].normal);
-        transform.rotation = Quaternion.LookRotation(reflectDir, Vector3.up);
+        Vector3 reflectDir = Vector3.Reflect(transform.forward, collision.contacts[0].normal);//反射のベクトル計算
+        transform.rotation = Quaternion.LookRotation(reflectDir, Vector3.up);//反射方向に回転
     }
 }
