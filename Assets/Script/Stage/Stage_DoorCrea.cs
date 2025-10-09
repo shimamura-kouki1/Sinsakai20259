@@ -18,8 +18,8 @@ public class RoomBasedDungeon : MonoBehaviour
 
     void Start()
     {
-        GenerateDungeon();//部屋の作成
-        AddDoors();//部屋の接続（ドア、壁の配置）
+        GenerateDungeon();
+        AddDoors();
     }
 
     /// <summary>
@@ -37,12 +37,13 @@ public class RoomBasedDungeon : MonoBehaviour
             bool placed = false;//部屋が置けたかどうか
             int attempts = 0; //試行回数（無限ループにならないために）
 
-            while (!placed && attempts < 50)//試行回数が50まで
+            while (!placed && attempts < 50)//50は試行回数
             {
-                attempts++;//試行回数をプラス
+                attempts++;
 
                 // ランダムに配置済みの部屋を選択
                 GameObject parentRoom = _placedRooms[Random.Range(0, _placedRooms.Count)];
+
                 //配置する位置をランダムな方向に決定
                 Vector3 dir = GetRandomDirection();
 
@@ -61,19 +62,7 @@ public class RoomBasedDungeon : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 上下左右のランダム方向を返す
-    /// </summary>
-    Vector3 GetRandomDirection()
-    {
-        switch (Random.Range(0, 4))//0～3の値をランダムでとる
-        {
-            case 0: return Vector3.forward;  // +Z
-            case 1: return Vector3.back;     // -Z
-            case 2: return Vector3.left;     // -X
-            default: return Vector3.right;   // +X
-        }
-    }
+ 
 
     /// <summary>
     /// 部屋を1つ配置
@@ -132,6 +121,19 @@ public class RoomBasedDungeon : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+    /// <summary>
+    /// 上下左右のランダム方向を返す
+    /// </summary>
+    Vector3 GetRandomDirection()
+    {
+        switch (Random.Range(0, 4))//0～3の値をランダムでとる
+        {
+            case 0: return Vector3.forward;  // +Z
+            case 1: return Vector3.back;     // -Z
+            case 2: return Vector3.left;     // -X
+            default: return Vector3.right;   // +X
         }
     }
 }
