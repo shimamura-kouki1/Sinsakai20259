@@ -18,6 +18,10 @@ public class push : MonoBehaviour
 
     private Transform _tr;
 
+    private void Start()
+    {
+        _tr = GetComponent<Transform>();
+    }
 
     void Update()
     {
