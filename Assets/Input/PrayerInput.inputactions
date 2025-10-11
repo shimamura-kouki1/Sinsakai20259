@@ -52,9 +52,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Action",
+                    "name": "Push",
                     "type": "Button",
-                    "id": "c26e99e0-405d-48ff-91b1-203e687408c3",
+                    "id": "d5199ac8-8049-42ed-a591-0c7313df0e35",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -306,12 +306,12 @@
                 },
                 {
                     "name": "",
-                    "id": "8dd8308c-dcfa-43d6-9c7b-3eb90fd3eddb",
+                    "id": "a769ec74-3492-41b2-acd1-625c1bb9ed8a",
                     "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Action",
+                    "action": "Push",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
